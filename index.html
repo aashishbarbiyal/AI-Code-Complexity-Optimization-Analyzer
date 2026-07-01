@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Code Complexity Analyzer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <h2>AI Code Complexity & Optimization Analyzer</h2>
+    <p>Paste your code below to get real-time Big-O complexity estimation and refactoring tips.</p>
+    
+    <textarea id="codeInput" placeholder="Paste your C++, Python, or JS code here..."></textarea>
+    <button onclick="analyzeCode()">Analyze Complexity</button>
+    
+    <div id="loader">Analyzing code via Gemini API... Please wait.</div>
+    <div id="result"></div>
+
+    <script>
+        async function analyzeCode() {
+            const code = document.getElementById('codeInput').value;
+            const resultDiv = document.getElementById('result');
+            const loader = document.getElementById('loader');
+            
+            if (!code.trim()) {
+                alert("Please enter a valid code snippet.");
+                return;
+            }
+
+            const API_KEY = "YOUR_GEMINI_API_KEY_HERE"; 
+            const URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+
+            const prompt = `Act as an expert software engineer. Analyze the following code snippet. 
+            1. Provide the exact Time Complexity (Big-O).
+            2. Provide the exact Space Complexity (Big-O).
+            3. Give 2 short, actionable optimization tips to reduce algorithmic latency.
+            Code: \n${code}`;
+
+            loader.style.display = "block";
+            resultDiv.style.display = "none";
+
+            try {
+                const response = await fetch(URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: prompt }] }]
+                    })
+                });
+
+                const data = await response.json();
+                if (data.error) throw new Error(data.error.message);
+
+                const markdownText = data.candidates[0].content.parts[0].text;
+                
+                resultDiv.innerHTML = markdownText.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+                resultDiv.style.display = "block";
+            } catch (error) {
+                resultDiv.innerHTML = `<span style="color:red;">Error: ${error.message}</span>`;
+                resultDiv.style.display = "block";
+            } finally {
+                loader.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>
