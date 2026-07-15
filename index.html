@@ -7,62 +7,47 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="app-container">
+        <header class="app-header">
+            <h1>AI Code Complexity & Optimization Analyzer</h1>
+            <p class="about-text">
+                An intelligent developer tool that instantly estimates <strong>Big-O algorithmic complexity</strong> and delivers targeted refactoring tips. Engineered for sub-second execution, it processes code snippets with high precision to help minimize runtime latency before deployment.
+            </p>
+        </header>
 
-    <h2>AI Code Complexity & Optimization Analyzer</h2>
-    <p>Paste your code below to get real-time Big-O complexity estimation and refactoring tips.</p>
-    
-    <textarea id="codeInput" placeholder="Paste your C++, Python, or JS code here..."></textarea>
-    <button onclick="analyzeCode()">Analyze Complexity</button>
-    
-    <div id="loader">Analyzing code via Gemini API... Please wait.</div>
-    <div id="result"></div>
+        <main class="app-workspace">
+            <section class="panel input-panel">
+                <div class="panel-header">
+                    <h2>Code Input</h2>
+                </div>
+                <div class="panel-body">
+                    <textarea id="code-input" placeholder="Paste your function or loop here..."></textarea>
+                    <button id="analyze-btn">Analyze Code</button>
+                </div>
+            </section>
 
-    <script>
-        async function analyzeCode() {
-            const code = document.getElementById('codeInput').value;
-            const resultDiv = document.getElementById('result');
-            const loader = document.getElementById('loader');
-            
-            if (!code.trim()) {
-                alert("Please enter a valid code snippet.");
-                return;
-            }
+            <section class="panel results-panel">
+                <div class="panel-header">
+                    <h2>Analysis Results</h2>
+                </div>
+                <div class="panel-body">
+                    <div class="metric-group">
+                        <p><strong>Time Complexity:</strong> <span id="time-complexity"></span></p>
+                        <p><strong>Space Complexity:</strong> <span id="space-complexity"></span></p>
+                    </div>
+                    
+                    <div class="tips-container">
+                        <h3>Actionable Refactoring Tips</h3>
+                        <ul id="tips-list">
+                            <li class="placeholder-tip">Submit code to see optimization suggestions.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
 
-            const API_KEY = "YOUR_GEMINI_API_KEY_HERE"; 
-            const URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
-
-            const prompt = `Act as an expert software engineer. Analyze the following code snippet. 
-            1. Provide the exact Time Complexity (Big-O).
-            2. Provide the exact Space Complexity (Big-O).
-            3. Give 2 short, actionable optimization tips to reduce algorithmic latency.
-            Code: \n${code}`;
-
-            loader.style.display = "block";
-            resultDiv.style.display = "none";
-
-            try {
-                const response = await fetch(URL, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: prompt }] }]
-                    })
-                });
-
-                const data = await response.json();
-                if (data.error) throw new Error(data.error.message);
-
-                const markdownText = data.candidates[0].content.parts[0].text;
-                
-                resultDiv.innerHTML = markdownText.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
-                resultDiv.style.display = "block";
-            } catch (error) {
-                resultDiv.innerHTML = `<span style="color:red;">Error: ${error.message}</span>`;
-                resultDiv.style.display = "block";
-            } finally {
-                loader.style.display = "none";
-            }
-        }
-    </script>
+    <script src="config.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>

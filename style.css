@@ -1,53 +1,146 @@
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    max-width: 800px;
-    margin: auto;
-    padding: 20px;
-    background-color: #f4f7f6;
+/* style.css */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
-h2 {
+/* Base body configuration providing natural scrolling layout */
+body, html {
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f6f9;
     color: #333;
 }
 
-textarea {
-    width: 100%;
-    height: 200px;
-    padding: 10px;
-    font-family: monospace;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+.app-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; 
+    padding: 20px;
+    gap: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
 }
 
-button {
-    margin-top: 10px;
-    padding: 10px 20px;
-    background-color: #0056b3;
+/* Fix 1: Heading perfectly centered horizontally */
+.app-header {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    text-align: center;
+}
+
+.app-header h1 {
+    font-size: 1.6rem;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, #2563eb, #9333ea);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.about-text {
+    font-size: 0.95rem;
+    color: #64748b;
+    line-height: 1.5;
+    max-width: 800px;
+    margin: 0 auto; /* Keeps paragraph text beautifully centered */
+}
+
+.app-workspace {
+    display: flex;
+    flex-wrap: wrap; 
+    gap: 20px;
+    align-items: flex-start; 
+}
+
+.panel {
+    flex: 1;
+    min-width: 320px; 
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+}
+
+.panel-header {
+    padding: 12px 15px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.panel-header h2 {
+    font-size: 1.1rem;
+    color: #2563eb; 
+    font-weight: 700;
+}
+
+.panel-body {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Fix 2: Bounded text-area height keeps the button visible instantly without scrolling on load */
+#code-input {
+    width: 100%;
+    height: 280px; 
+    resize: vertical; 
+    padding: 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+}
+
+/* Fix 3: Button is isolated from full width width constraints */
+#analyze-btn {
+    align-self: flex-start; /* Constrains it cleanly to its own text footprint */
+    min-width: 160px;       /* Keeps it distinct and easily clickable */
+    background-color: #2563eb;
     color: white;
     border: none;
-    border-radius: 5px;
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-size: 0.95rem;
     cursor: pointer;
-    font-size: 16px;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
 }
 
-button:hover {
-    background-color: #004494;
+#analyze-btn:hover {
+    background-color: #1d4ed8;
 }
 
-#loader {
-    display: none;
-    color: #0056b3;
-    font-weight: bold;
-    margin-top: 15px;
+.metric-group p {
+    margin-bottom: 10px;
+    font-size: 1.05rem;
 }
 
-#result {
-    margin-top: 20px;
-    padding: 15px;
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    min-height: 50px;
-    display: none;
+/* Fix 4: Clear independent margin cushion shifts tips lower down the viewport */
+.tips-container {
+    margin-top: 30px; 
+    border-top: 1px solid #f1f5f9;
+    padding-top: 20px;
+}
+
+.tips-container h3 {
+    font-size: 1.1rem;
+    color: #9333ea; 
+    margin-bottom: 12px;
+}
+
+#tips-list {
+    padding-left: 20px;
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+.placeholder-tip {
+    color: #94a3b8;
+    list-style-type: none;
+    margin-left: -20px;
 }
